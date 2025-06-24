@@ -1,0 +1,116 @@
+/* Estilos generales */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+}
+
+/* Estilos del formulario */
+form {
+    background: white;
+    padding: 20px;
+    display: inline-block;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+input,
+button {
+    padding: 10px;
+    margin: 8px;
+    width: 80%;
+    max-width: 250px;
+}
+
+button {
+    cursor: pointer;
+    font-weight: bold;
+}
+
+/* Estilos del sidebar */
+.sidebar {
+    height: 100vh;
+    background-color: #343a40;
+    color: white;
+    padding: 0;
+}
+
+.sidebar a {
+    color: white;
+    display: block;
+    padding: 12px 20px;
+    text-decoration: none;
+}
+
+.sidebar a:hover {
+    background-color: #495057;
+}
+
+/* Estilos del nombre del sitio en la barra lateral */
+.sidebar h4 a {
+    font-weight: bold;
+    padding: 8px;
+    display: block;
+    text-align: center;
+    color: white;
+    text-decoration: none;
+}
+
+.sidebar h4 a:hover {
+    background-color: #495057;
+    border-radius: 5px;
+}
+
+/* Ajuste para el contenedor principal */
+.container-fluid {
+    height: 100vh;
+}
+
+/* Ajuste para la fila principal */
+.row {
+    margin: 0;
+    padding: 0;
+}
+
+/* Estilos de las notificaciones toast */
+.toast {
+    padding: 12px 20px;
+    margin: 10px auto;
+    display: inline-block;
+    border-radius: 5px;
+    font-weight: bold;
+    max-width: 400px;
+}
+
+.toast.exito {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.toast.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.toast.advertencia {
+    background-color: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeeba;
+}
+.form-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Animación de desvanecimiento */
+@keyframes fadeOut {
+    0% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { opacity: 0; display: none; }
+}
