@@ -1,5 +1,5 @@
 <?php
-require_once(__DIR__ . "/../conexion.php"); // Usa __DIR__ para asegurar la ruta
+require_once(__DIR__ . "/../conexion.php");
 
 if (session_status() === PHP_SESSION_NONE) session_start();
 
@@ -10,7 +10,7 @@ $sql = "SELECT * FROM envios
         WHERE usuario_id = $usuario_id 
         ORDER BY fecha_envio DESC";
 
-$resultado = $conexion->query($sql); // usamos $conexion, no $paquetes_conn
+$resultado = $conexion->query($sql);
 ?>
 
 <h3>Historial de Envíos</h3>
@@ -19,7 +19,7 @@ $resultado = $conexion->query($sql); // usamos $conexion, no $paquetes_conn
     <table class="table table-bordered table-striped mt-3">
         <thead>
             <tr>
-                <th>ID</th>
+                <th>Código</th>
                 <th>Destino</th>
                 <th>Peso (kg)</th>
                 <th>Estado</th>
@@ -29,11 +29,11 @@ $resultado = $conexion->query($sql); // usamos $conexion, no $paquetes_conn
         <tbody>
         <?php while ($fila = $resultado->fetch_assoc()): ?>
             <tr>
-                <td><?php echo $fila['id']; ?></td>
-                <td><?php echo $fila['destino']; ?></td>
-                <td><?php echo $fila['peso']; ?></td>
-                <td><?php echo $fila['estado']; ?></td>
-                <td><?php echo $fila['fecha_envio']; ?></td>
+                <td><?= htmlspecialchars($fila['codigo_seguimiento']); ?></td>
+                <td><?= htmlspecialchars($fila['destino']); ?></td>
+                <td><?= $fila['peso']; ?></td>
+                <td><?= $fila['estado']; ?></td>
+                <td><?= $fila['fecha_envio']; ?></td>
             </tr>
         <?php endwhile; ?>
         </tbody>

@@ -32,11 +32,11 @@ if (isset($_POST['actualizar_envio'])) {
     }
 }
 
-// Construir WHERE
-$sql_base = "FROM envios WHERE 1";
+// Construir cláusula WHERE
+$sql_base = " FROM envios WHERE 1";
 if ($busqueda) {
     $b = $conexion->real_escape_string($busqueda);
-    $sql_base .= " AND (id LIKE '%$b%' OR nombre_destinatario LIKE '%$b%')";
+    $sql_base .= " AND (id LIKE '%$b%' OR nombre_destinatario LIKE '%$b%' OR codigo_seguimiento LIKE '%$b%')";
 }
 if ($filtro_estado) {
     $e = $conexion->real_escape_string($filtro_estado);
@@ -50,7 +50,8 @@ if ($filtro_prioridad) {
 // Total y datos
 $total = $conexion->query("SELECT COUNT(*) AS cantidad $sql_base")->fetch_assoc()['cantidad'];
 $paginas = ceil($total / $por_pagina);
-$sql = "SELECT * $sql_base ORDER BY $orden $sentido LIMIT $offset, $por_pagina";
+$sql = "SELECT id, codigo_seguimiento, nombre_destinatario, telefono, destino, peso, estado, prioridad, fecha_envio 
+        $sql_base ORDER BY $orden $sentido LIMIT $offset, $por_pagina";
 $resultado = $conexion->query($sql);
 ?>
 
@@ -59,7 +60,7 @@ $resultado = $conexion->query($sql);
 <form method="get" action="principal.php" class="row mb-3">
     <input type="hidden" name="page" value="gestion">
     <div class="col-md-3">
-        <input type="text" name="busqueda" class="form-control" placeholder="Buscar por ID o nombre" value="<?= htmlspecialchars($busqueda) ?>">
+        <input type="text" name="busqueda" class="form-control" placeholder="Buscar por código, ID o nombre" value="<?= htmlspecialchars($busqueda) ?>">
     </div>
     <div class="col-md-3">
         <select name="f_estado" class="form-control">
@@ -91,6 +92,7 @@ $resultado = $conexion->query($sql);
         <tr>
             <?php
             $columnas = [
+                'codigo_seguimiento' => 'Código',
                 'id' => 'ID',
                 'nombre_destinatario' => 'Nombre',
                 'telefono' => 'Teléfono',
@@ -122,10 +124,14 @@ $resultado = $conexion->query($sql);
     <?php while ($envio = $resultado->fetch_assoc()): ?>
         <tr>
         <form method="post" action="principal.php?page=gestion&<?= http_build_query($_GET) ?>">
+            <td><strong><?= htmlspecialchars($envio['codigo_seguimiento']) ?></strong></td>
             <td><?= $envio['id']; ?></td>
             <td><input type="text" name="nombre_destinatario" value="<?= $envio['nombre_destinatario']; ?>" class="form-control" required></td>
             <td><input type="text" name="telefono" value="<?= $envio['telefono']; ?>" class="form-control" required></td>
-            <td><input type="text" name="destino" value="<?= $envio['destino']; ?>" class="form-control" required></td>
+<td class="position-relative">
+  <input type="text" name="destino" value="<?= $envio['destino']; ?>" class="form-control" required>
+  <div class="sugerencias-autocomplete list-group mt-1" style="position:absolute; z-index:999;"></div>
+</td>
             <td><input type="number" name="peso" value="<?= $envio['peso']; ?>" step="0.01" class="form-control" required></td>
             <td>
                 <select name="estado" class="form-control" required>
@@ -168,6 +174,46 @@ $resultado = $conexion->query($sql);
     <?php endfor; ?>
   </ul>
 </nav>
+<script>
+document.querySelectorAll('input[name="destino"]').forEach((input) => {
+    const container = input.parentElement.querySelector('.sugerencias-autocomplete');
+    let delay;
+
+    input.addEventListener('input', () => {
+        const texto = input.value.trim();
+        clearTimeout(delay);
+
+        if (texto.length < 3) {
+            container.innerHTML = '';
+            return;
+        }
+
+        delay = setTimeout(() => {
+            fetch('formularios/oproute.php?q=' + encodeURIComponent(texto))
+                .then(res => res.json())
+                .then(data => {
+                    container.innerHTML = '';
+                    if (data.features) {
+                        data.features.forEach(feature => {
+                            const btn = document.createElement('button');
+                            btn.type = 'button';
+                            btn.className = 'list-group-item list-group-item-action';
+                            btn.textContent = feature.properties.label;
+                            btn.onclick = () => {
+                                input.value = feature.properties.label;
+                                container.innerHTML = '';
+                            };
+                            container.appendChild(btn);
+                        });
+                    }
+                })
+                .catch(() => {
+                    container.innerHTML = '';
+                });
+        }, 350);
+    });
+});
+</script>
 
 <?php else: ?>
     <div class="alert alert-info">No se encontraron envíos registrados.</div>
