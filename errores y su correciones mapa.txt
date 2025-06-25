@@ -1,0 +1,34 @@
+estos son los errores que tuvo este archivo hasta que se pudieron corregir 
+
+1
+🛠️ Lista de errores y cómo se resolvieron
+- ❌ La API respondía con routes, pero el código esperaba features
+- Síntoma: Cannot read properties of undefined (reading '0')
+- Motivo: El código intentaba acceder a data.features[0], pero ORS devuelve routes[0] por defecto.
+- Solución: Se cambió el acceso a data.routes[0].
+
+ 
+2
+❌ L.Polyline.fromEncoded is not a function
+- Síntoma: Error al intentar decodificar la geometría con Leaflet.
+- Motivo: El plugin leaflet-encoded no cargaba correctamente o no era compatible con Leaflet 1.9.3.
+- Solución: Se eliminó ese plugin y se reemplazó con la librería robusta @mapbox/polyline.
+
+3 - ⚠️ Geometría venía codificada pero no se decodificaba bien
+- Síntoma: No se mostraba la ruta aunque la respuesta tenía datos.
+- Motivo: Leaflet no puede interpretar rutas codificadas sin una decodificación previa.
+- Solución: Se usó polyline.decode(encoded) y se adaptaron las coordenadas para Leaflet.
+
+4
+- ⚠️ Orden de scripts
+- Síntoma potencial: Funciones no disponibles si se cargan los scripts fuera de orden.
+- Motivo: El plugin viejo se cargaba después de intentar usarlo.
+- Solución: En la versión final, se carga primero Leaflet, luego @mapbox/polyline.
+
+5
+- 🧪 Posibles errores de coordenadas vacías o mal definidas
+- Prevención: Se agregaron validaciones con Array.isArray(...) y length !== 2.
+- Resultado: Si alguna coordenada está mal, se muestra un alert y no se ejecuta el trazado.
+
+deberiamos verificar si estos errores tmb aplican al proyecto original y como resolverlos 
+ 
