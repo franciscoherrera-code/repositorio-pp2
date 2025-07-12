@@ -54,7 +54,7 @@
     </div>
 
     <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB-K0XVJe_jjPe3xgssEbUVRZb9AjxlY00&libraries=routes&callback=initMap"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=API-KEY&libraries=routes&callback=initMap"></script>
     <script src="js/script.js"></script>
 </body>
 </html>
